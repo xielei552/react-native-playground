@@ -1,40 +1,82 @@
 import React from 'react';
-import { Button, Text, View } from 'react-native';
+import { Button, Text, View, FlatList, ListItem, TouchableHighlight, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Version can be specified in package.json
 import { StackNavigator, TabNavigator, TabBarTop } from 'react-navigation'; // Version can be specified in package.json
 
-class HomeScreen extends React.Component {
+class CoachScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Coach',
+  };
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Home!</Text>
-        <Button
-          title="Go to Settings"
-          onPress={() => this.props.navigation.navigate('Settings')}
-        />
-        <Button
-          title="Go to Details"
-          onPress={() => this.props.navigation.navigate('Details')}
-        />
-      </View>
+      <FlatList
+        ItemSeparatorComponent={({highlighted}) => (
+          <View style={[highlighted && {marginLeft: 0}]} />
+        )}
+        data={[{title: 'Coach one', key: 'item1'}, {title: 'Coach two', key: 'item2'}, {title: 'Coach three', key: 'item3'}]}
+        renderItem={({item, separators}) => (
+          <TouchableHighlight
+            onPress={() => this._onPress(item)}
+            onShowUnderlay={separators.highlight}
+            onHideUnderlay={separators.unhighlight}>
+            <View style={{backgroundColor: 'white', paddingTop: 10, paddingBottom: 10, marginTop: 1}}>
+              <Text style={Styles.bigBlack}>{item.title}</Text>
+            </View>
+          </TouchableHighlight>
+        )}
+      />
     );
   }
 }
 
-class SettingsScreen extends React.Component {
+class StudentScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Student',
+  };
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Settings!</Text>
-        <Button
-          title="Go to Home"
-          onPress={() => this.props.navigation.navigate('Home')}
-        />
-        <Button
-          title="Go to Details"
-          onPress={() => this.props.navigation.navigate('Details')}
-        />
-      </View>
+      <FlatList
+        ItemSeparatorComponent={({highlighted}) => (
+          <View style={[highlighted && {marginLeft: 0}]} />
+        )}
+        data={[{title: 'Student one', key: 'item1'}, {title: 'Student two', key: 'item2'}, {title: 'Student three', key: 'item3'}]}
+        renderItem={({item, separators}) => (
+          <TouchableHighlight
+            onPress={() => this._onPress(item)}
+            onShowUnderlay={separators.highlight}
+            onHideUnderlay={separators.unhighlight}>
+            <View style={{backgroundColor: 'white', paddingTop: 10, paddingBottom: 10, marginTop: 1}}>
+              <Text style={Styles.bigBlack}>{item.title}</Text>
+            </View>
+          </TouchableHighlight>
+        )}
+      />
+    );
+  }
+}
+
+class ScheduleScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Schedule',
+  };
+  render() {
+    return (
+      <FlatList
+        ItemSeparatorComponent={({highlighted}) => (
+          <View style={[highlighted && {marginLeft: 0}]} />
+        )}
+        data={[{title: 'Schedule one', key: 'item1'}, {title: 'Schedule two', key: 'item2'}, {title: 'Schedule three', key: 'item3'}]}
+        renderItem={({item, separators}) => (
+          <TouchableHighlight
+            onPress={() => this._onPress(item)}
+            onShowUnderlay={separators.highlight}
+            onHideUnderlay={separators.unhighlight}>
+            <View style={{backgroundColor: 'white', paddingTop: 10, paddingBottom: 10, marginTop: 1}}>
+              <Text style={Styles.bigBlack}>{item.title}</Text>
+            </View>
+          </TouchableHighlight>
+        )}
+      />
     );
   }
 }
@@ -49,29 +91,44 @@ class DetailsScreen extends React.Component {
   }
 }
 
-const HomeStack = StackNavigator({
-  Home: { screen: HomeScreen },
+const Styles = StyleSheet.create({
+  bigBlack: {
+    fontWeight: 'bold',
+    fontSize: 30,
+  }
+});
+
+const CoachStack = StackNavigator({
+  Coach: { screen: CoachScreen },
   Details: { screen: DetailsScreen },
 });
 
-const SettingsStack = StackNavigator({
-  Settings: { screen: SettingsScreen },
+const StudentStack = StackNavigator({
+  Student: { screen: StudentScreen },
+  Details: { screen: DetailsScreen },
+});
+
+const ScheduleStack = StackNavigator({
+  Schedule: { screen: ScheduleScreen },
   Details: { screen: DetailsScreen },
 });
 
 const TabNav = TabNavigator(
   {
-    Home: { screen: HomeScreen },
-    Settings: { screen: SettingsScreen },
+    Coach: { screen: CoachScreen },
+    Student: { screen: StudentScreen },
+    Schedule: { screen: ScheduleScreen },
   },
   {
     navigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, tintColor }) => {
         const { routeName } = navigation.state;
         let iconName;
-        if (routeName === 'Home') {
+        if (routeName === 'Coach') {
           iconName = `ios-information-circle${focused ? '' : '-outline'}`;
-        } else if (routeName === 'Settings') {
+        } else if (routeName === 'Student') {
+          iconName = `ios-options${focused ? '' : '-outline'}`;
+        } else if (routeName === 'Schedule') {
           iconName = `ios-options${focused ? '' : '-outline'}`;
         }
 
@@ -89,8 +146,9 @@ const TabNav = TabNavigator(
 
 const AppNavigator = StackNavigator(
   {
-    Home: { screen: TabNav },
-    Settings: { screen: TabNav },
+    Coach: { screen: TabNav },
+    Student: { screen: TabNav },
+    Schedule: { screen: TabNav },
   },
 )
 
